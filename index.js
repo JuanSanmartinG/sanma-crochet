@@ -266,7 +266,7 @@ app.get('/rastrear/consultar', async (req, res) => {
 
     try {
         const queryBusqueda = `
-            SELECT o.tracking_code, o.status, o.customer_name, p.title AS producto_titulo
+            SELECT o.tracking_code, o.status, o.customer_name, p.title AS producto_nombre
             FROM orders o
             JOIN order_items oi ON o.id = oi.order_id
             LEFT JOIN products p ON oi.product_id = p.id
