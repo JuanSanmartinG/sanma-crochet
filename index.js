@@ -14,12 +14,13 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 // 1. CONFIGURACIÓN DE BASE DE DATOS (POSTGRES)
 // ==========================================
+const { Pool } = require('pg');
+
 const pool = new Pool({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false 
+    }
 });
 
 pool.connect((err, client, release) => {
