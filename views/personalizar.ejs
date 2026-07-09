@@ -1,0 +1,76 @@
+<%- include('partials/header') %>
+
+<main class="custom-main-container">
+    <a href="/" class="back-link">← Volver al Catálogo</a>
+
+    <div class="custom-layout-grid">
+        
+        <!-- Columna de Previsualización -->
+        <div class="product-preview-column">
+            <img src="<%= producto.image_url %>" alt="<%= producto.title %>" class="product-featured-img">
+            <h2 class="product-title"><%= producto.title %></h2>
+            <p class="product-description"><%= producto.description %></p>
+            <h4 class="product-base-price">Precio Base: $<%= Number(producto.base_price).toLocaleString('es-CO') %></h4>
+        </div>
+
+        <!-- Columna del Formulario -->
+        <div class="form-custom-column">
+            <h3 class="form-title">Personaliza tu pedido</h3>
+            <p class="form-subtitle">Cuéntanos cómo te gustaría. Samigomu se encargará de tejerlo tal como lo sueñas.</p>
+
+            <form action="/pedir" method="POST" enctype="multipart/form-data" class="customization-form">
+                
+                <input type="hidden" name="producto_id" value="<%= producto.id %>">
+
+                <div class="form-group">
+                    <label class="form-label">Tu Nombre completo *</label>
+                    <input type="text" name="nombre_cliente" required class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Teléfono de Contacto (WhatsApp) *</label>
+                    <input type="tel" name="telefono_cliente" required placeholder="Ej: 3123456789" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="custom_size" class="form-label">Tamaño deseado</label>
+                    <select name="custom_size" id="custom_size" class="form-input">
+                        <option value="Estándar (Original)">Estándar (Como en la foto)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="custom_colors" class="form-label">¿Qué colores te gustarían?</label>
+                    <input type="text" name="custom_colors" id="custom_colors" class="form-input" placeholder="Ej: Cuerpo azul, gorro amarillo">
+                </div>
+
+                <div class="form-group">
+                    <label for="custom_notes" class="form-label">Notas o especificaciones adicionales</label>
+                    <textarea name="custom_notes" id="custom_notes" class="form-input form-textarea" placeholder="Cuéntanos más detalles..."></textarea>
+                </div>
+                <hr class="success-divider">
+
+               <hr class="success-divider">
+            <h3 class="form-title">💳 Método de Pago (100% Adelantado)</h3>
+
+                <div class="qr-payment-container">
+                    <h3 class="qr-payment-title">📸 Escanea el QR para realizar tu transferencia:</h3>
+                    <img src="/images/QR_pago.jpeg" alt="QR de Pago Sanma Crochet" class="qr-payment-image">
+                    <p class="qr-payment-instruction">Una vez realizado el pago, adjunta el comprobante abajo.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment_receipt" class="form-label label-highlight">Sube el Pantallazo de tu Comprobante *</label>
+                    <input type="file" name="payment_receipt" id="payment_receipt" accept="image/*" required class="form-input">
+                </div>
+            </div>
+                </script>
+                <button type="submit" class="submit-order-btn">Enviar Pedido 🧶</button>
+            </form>
+        </div>
+
+    </div>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

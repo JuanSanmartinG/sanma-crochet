@@ -1,0 +1,92 @@
+<%- include('partials/header') %>
+
+<main class="container admin-main-panel">
+    <h1 class="hero-title text-left">Panel de Control de Pedidos 🧶</h1>
+    <p class="hero-text text-left page-description">
+        Gestiona las solicitudes entrantes, revisa los detalles de personalización y actualiza estados.
+    </p>
+
+    <div class="admin-nav-bar">
+        <a href="/admin/productos" class="btn-admin-action">
+            📦 Gestionar Catálogo de Amigurumis
+        </a>
+    </div>
+
+    <div class="admin-table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Cliente</th>
+                    <th>Amigurumi</th>
+                    <th>Personalización</th>
+                    <th>Total</th>
+                    <th>Método</th>
+                    <th>Comprobante</th>
+                    <th>Estado Pedido</th>
+                    <th>Acciones</th> </tr>
+            </thead>
+            <tbody>
+                <% pedidos.forEach(pedido => { %>
+                    <tr>
+                        <td><strong><%= pedido.tracking_code %></strong></td>
+                        <td>
+                            <div class="client-info">
+                                <span><%= pedido.customer_name %></span>
+                                <small class="text-muted"><%= pedido.customer_phone %></small>
+                            </div>
+                        </td>
+                        <td><%= pedido.producto_nombre ? pedido.producto_nombre : '✨ Diseño Personalizado'%></td>
+                        
+                        <td>
+                            <div class="custom-details">
+                                <p>📐 <strong>Tamaño:</strong> <%= pedido.custom_size || 'Estándar' %></p>
+                                <p>🎨 <strong>Colores:</strong> <%= pedido.custom_colors || 'Originales' %></p>
+                                <p>📝 <strong>Notas:</strong> <%= pedido.custom_notes || 'Ninguna' %></p>
+                            </div>
+                        </td>
+                        
+                        <td>$<%= pedido.total_price %></td>
+                        
+                        <td>
+                            <span class="badge-method"><%= pedido.payment_method %></span>
+                        </td>
+
+                            <td>
+                                <% if (pedido.payment_reference) { %>
+                                    <a href="<%= pedido.payment_reference %>" target="_blank" class="btn-view-receipt">👁️ Ver Pago</a>
+                                <% } %>
+
+                                <% if (pedido.ref_image_url) { %>
+                                    <a href="<%= pedido.ref_image_url %>" target="_blank" class="btn-view-reference">📸 Ver Referencia</a>
+                                <% } %>
+
+                                <% if (!pedido.payment_reference && !pedido.ref_image_url) { %>
+                                    <span class="text-muted">Sin archivo</span>
+                                <% } %>
+                            </td>        
+                        <td>
+                            <form action="/admin/pedido/actualizar-estado/<%= pedido.orden_id %>" method="POST">
+                                <select name="status" onchange="this.form.submit()" class="admin-select-status status-<%= pedido.status.toLowerCase() %>">
+                                    <option value="Recibido" <%= pedido.status === 'Recibido' || pedido.status === 'Pendiente' ? 'selected' : '' %>>📥 Recibido</option>
+                                    <option value="Tejiendo" <%= pedido.status === 'Tejiendo' ? 'selected' : '' %>>🧶 Tejiendo</option>
+                                    <option value="Enviado" <%= pedido.status === 'Enviado' || pedido.status === 'Terminado' ? 'selected' : '' %>>🚀 Enviado</option>
+                                </select>
+                            </form>
+                        </td>
+
+                        <td>
+                            <form action="/admin/delete-order" method="POST" onsubmit="return confirm('¿Estás segura de eliminar este pedido? Esta acción es irreversible y borrará el comprobante de la base de datos');">
+                                <input type="hidden" name="order_id" value="<%= pedido.orden_id %>">
+                                <button type="submit" class="btn-delete-order">🗑️ Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<%- include('partials/header') %>
+
+<main class="custom-main-container">
+    <div>
+        <a href="/admin/productos" class="back-link">⬅️ Volver al Catálogo</a>
+    </div>
+
+    <section class="form-custom-column">
+        <h3 class="form-title">✏️ Editar Amigurumi</h3>
+        <p class="form-subtitle">Modifica los campos del producto y guarda los cambios de inmediato.</p>
+
+        <form action="/admin/productos/editar/<%= producto.id %>" method="POST" class="login-form">
+            <div class="form-group">
+                <label for="title" class="form-label">Nombre del Amigurumi</label>
+                <input type="text" id="title" name="title" value="<%= producto.title %>" required class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="base_price" class="form-label">Precio Base ($)</label>
+                <input type="number" id="base_price" name="base_price" value="<%= producto.base_price %>" required class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="image_url" class="form-label">URL de la Imagen</label>
+                <input type="text" id="image_url" name="image_url" value="<%= producto.image_url %>" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Descripción o Detalles</label>
+                <textarea id="description" name="description" class="form-input form-textarea"><%= producto.description %></textarea>
+            </div>
+
+            <button type="submit" class="btn-admin btn-block">💾 Guardar Cambios</button>
+        </form>
+    </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

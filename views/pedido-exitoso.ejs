@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+
+<main class="success-main-container">
+    <div class="success-card">
+        <h1 class="success-title">¡Pedido Recibido! 🎉</h1>
+        <p class="success-text">Tu solicitud ha sido enviada con éxito a la base de datos de producción.</p>
+        
+        <hr class="success-divider">
+
+        <p class="tracking-label">Tu Código de Rastreo</p>
+        <h2 class="tracking-code-box"><%= code %></h2>
+
+        <p class="success-instructions">
+            Guarda este código. Con él podrás consultar el estado de tu amigurumi en la sección <strong>"Rastrear Pedido"</strong> de nuestro menú.
+        </p>
+
+        <div class="success-actions">
+            <a href="/" class="btn-order">Volver al Inicio</a>
+        </div>
+    </div>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

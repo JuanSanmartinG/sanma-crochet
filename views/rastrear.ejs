@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+
+<main class="success-main-container">
+    <div class="success-card">
+        <h2 class="tracking-main-title">🔎 Rastrear mi Amigurumi</h2>
+        <p class="success-text">Ingresa el código de rastreo que te dimos al confirmar tu pedido para ver su estado actual.</p>
+
+        <form action="/rastrear/consultar" method="GET" class="tracking-search-form">
+            <div class="form-group">
+                <input type="text" 
+                       name="codigo" 
+                       value="<%= codigoBuscado %>" 
+                       placeholder="Ej: SM-ABCD" 
+                       required 
+                       class="form-input tracking-input-code">
+            </div>
+            <button type="submit" class="btn-order btn-block">Buscar Pedido</button>
+        </form>
+
+        <hr class="success-divider">
+
+        <% if (error) { %>
+            <p class="tracking-error-text"><%= error %></p>
+        <% } %>
+
+        <% if (pedido) { %>
+            <div class="tracking-result-box">
+                <h3 class="tracking-result-title">¡Pedido Encontrado!</h3>
+                
+                <p class="tracking-info-item"><strong>Cliente:</strong> <%= pedido.customer_name %></p>
+                <p class="tracking-info-item"><strong>Producto:</strong> <%= pedido.producto_nombre ? pedido.producto_nombre : '✨ Diseño Personalizado' %></p>
+                
+                <div class="tracking-status-container">
+                    <strong>Estado actual:</strong>
+                    <span class="status-badge status-<%= pedido.status.toLowerCase() %>">
+                        <%= pedido.status === 'Proceso' ? 'En Proceso' : pedido.status %>
+                    </span>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

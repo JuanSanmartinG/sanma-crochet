@@ -1,0 +1,39 @@
+<%- include('partials/header') %>
+
+<main class="container">
+    <h1 class="hero-title">Tejidos con Amor y Detalle</h1>
+    <p class="hero-text">Explora nuestros diseños base o solicita un pedido 100% personalizado para ti o un regalo especial.</p>
+    
+    <div class="cta-box">
+        <h3>¿Quieres algo único?</h3>
+        <p>Elige un diseño e indícanos los colores, tamaño y detalles que imaginas.</p>
+        <a href="/pedido-personalizado" class="btn-order">¡Mandar a tejer algo personalizado!</a>
+    </div>
+
+    <h2 class="section-title">Catálogo de Inspiración</h2>
+    
+    <div class="products-grid">
+        <% if (productos.length === 0) { %>
+            <p>No hay productos disponibles en este momento.</p>
+        <% } else { %>
+            <% productos.forEach(producto => { %>
+                <div class="product-card">
+                    <img src="<%= producto.image_url %>" alt="<%= producto.title %>" class="product-img">
+                    
+                    <div class="product-body">
+                        <h4 class="product-title"><%= producto.title %></h4>
+                        <p class="product-desc"><%= producto.description %></p>
+                    </div>
+                    
+                    <div class="product-footer">
+                        <span class="product-price">$<%= Number(producto.base_price).toLocaleString('es-CO') %></span>
+                        <a href="/personalizar?id=<%= producto.id %>" class="btn-customize">Personalizar</a>
+                    </div>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>
