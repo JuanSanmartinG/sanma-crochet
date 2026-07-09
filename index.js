@@ -180,7 +180,16 @@ app.get('/personalizar', async (req, res) => {
 });
 
 app.post('/pedir', upload.single('payment_receipt'), async (req, res) => {
-    const { nombre_cliente, telefono_cliente, producto_id, custom_size, custom_colors, custom_notes } = req.body;
+    const { 
+        nombre_cliente, 
+        telefono_cliente, 
+        contacto_alternativo, 
+        direccion_envio, 
+        producto_id, 
+        custom_size, 
+        custom_colors, 
+        custom_notes 
+    } = req.body;
 
     if (!req.file) {
         return res.status(400).send('Es obligatorio subir el comprobante de pago para procesar el pedido.');
@@ -197,13 +206,33 @@ app.post('/pedir', upload.single('payment_receipt'), async (req, res) => {
         if (productoRes.rows.length === 0) throw new Error('El amigurumi seleccionado no existe.');
         const precioTotal = productoRes.rows[0].base_price;
 
-        // Modificado a 'Recibido' para alinearse con tus nuevos estados interactivos
         const queryOrden = `
-            INSERT INTO orders (tracking_code, customer_name, customer_phone, total_price, payment_method, payment_reference, status, payment_status)
-            VALUES ($1, $2, $3, $4, 'Transferencia', $5, 'Recibido', 'Pendiente')
+            INSERT INTO orders (
+                tracking_code, 
+                customer_name, 
+                customer_phone, 
+                alternative_contact, 
+                shipping_address, 
+                total_price, 
+                payment_method, 
+                payment_reference, 
+                status, 
+                payment_status
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, 'Transferencia', $7, 'Recibido', 'Pendiente')
             RETURNING id;
         `;
-        const ordenRes = await client.query(queryOrden, [trackingCode, nombre_cliente, telefono_cliente, precioTotal, urlComprobante]);
+        
+        const ordenRes = await client.query(queryOrden, [
+            trackingCode,          
+            nombre_cliente,      
+            telefono_cliente,      
+            contacto_alternativo,  
+            direccion_envio,       
+            precioTotal,           
+            urlComprobante         
+        ]);
+        
         const nuevoOrdenId = ordenRes.rows[0].id;
 
         const queryItem = `
@@ -266,7 +295,7 @@ app.get('/admin', requiereAutenticacion, async (req, res) => {
     try {
         const query = `
             SELECT 
-                o.id AS orden_id, o.tracking_code, o.customer_name, o.customer_phone, o.status,
+                o.id AS orden_id, o.tracking_code, o.customer_name, o.customer_phone, o.alternative_contact, o.shipping_address, o.status,
                 o.total_price, o.created_at, o.payment_method, o.payment_reference, o.payment_status,
                 p.title AS producto_nombre, oi.custom_size, oi.custom_colors, oi.custom_notes, oi.ref_image_url
             FROM orders o

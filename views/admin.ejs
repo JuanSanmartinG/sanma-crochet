@@ -17,25 +17,32 @@
             <thead>
                 <tr>
                     <th>Código</th>
-                    <th>Cliente</th>
+                    <th>Cliente y Envío</th>
                     <th>Amigurumi</th>
                     <th>Personalización</th>
                     <th>Total</th>
                     <th>Método</th>
                     <th>Comprobante</th>
                     <th>Estado Pedido</th>
-                    <th>Acciones</th> </tr>
+                    <th>Acciones</th>
+                </tr>
             </thead>
             <tbody>
                 <% pedidos.forEach(pedido => { %>
                     <tr>
                         <td><strong><%= pedido.tracking_code %></strong></td>
+                        
                         <td>
-                            <div class="client-info">
-                                <span><%= pedido.customer_name %></span>
-                                <small class="text-muted"><%= pedido.customer_phone %></small>
+                            <div class="client-info" style="display: flex; flex-direction: column; gap: 4px; min-width: 200px;">
+                                <span class="td-bold" style="font-weight: bold; color: var(--text-dark);">👤 <%= pedido.customer_name %></span>
+                                <span class="text-muted" style="font-size: 13px;">📞 WA: <%= pedido.customer_phone %></span>
+                                <span class="text-muted" style="font-size: 13px; color: #7c4dff;">📸 Alt: <%= pedido.alternative_contact || 'No asignado' %></span>
+                                <span class="label-highlight" style="font-size: 12px; margin-top: 4px; padding: 4px 8px; background-color: rgba(124, 77, 255, 0.1); border-radius: 4px; display: inline-block; line-height: 1.3;">
+                                    📍 <strong>Envío:</strong> <%= pedido.shipping_address %>
+                                </span>
                             </div>
                         </td>
+                        
                         <td><%= pedido.producto_nombre ? pedido.producto_nombre : '✨ Diseño Personalizado'%></td>
                         
                         <td>
@@ -46,25 +53,26 @@
                             </div>
                         </td>
                         
-                        <td>$<%= pedido.total_price %></td>
+                        <td>$<%= Number(pedido.total_price).toLocaleString('es-CO') %></td>
                         
                         <td>
                             <span class="badge-method"><%= pedido.payment_method %></span>
                         </td>
 
-                            <td>
-                                <% if (pedido.payment_reference) { %>
-                                    <a href="<%= pedido.payment_reference %>" target="_blank" class="btn-view-receipt">👁️ Ver Pago</a>
-                                <% } %>
+                        <td>
+                            <% if (pedido.payment_reference) { %>
+                                <a href="<%= pedido.payment_reference %>" target="_blank" class="btn-view-receipt" style="display: block; margin-bottom: 4px; text-align: center;">👁️ Ver Pago</a>
+                            <% } %>
 
-                                <% if (pedido.ref_image_url) { %>
-                                    <a href="<%= pedido.ref_image_url %>" target="_blank" class="btn-view-reference">📸 Ver Referencia</a>
-                                <% } %>
+                            <% if (pedido.ref_image_url) { %>
+                                <a href="<%= pedido.ref_image_url %>" target="_blank" class="btn-view-reference" style="display: block; text-align: center;">📸 Ver Referencia</a>
+                            <% } %>
 
-                                <% if (!pedido.payment_reference && !pedido.ref_image_url) { %>
-                                    <span class="text-muted">Sin archivo</span>
-                                <% } %>
-                            </td>        
+                            <% if (!pedido.payment_reference && !pedido.ref_image_url) { %>
+                                <span class="text-muted">Sin archivo</span>
+                            <% } %>
+                        </td>        
+                        
                         <td>
                             <form action="/admin/pedido/actualizar-estado/<%= pedido.orden_id %>" method="POST">
                                 <select name="status" onchange="this.form.submit()" class="admin-select-status status-<%= pedido.status.toLowerCase() %>">
@@ -87,6 +95,7 @@
         </table>
     </div>
 </main>
+
 <%- include('partials/footer') %>
 </body>
 </html>
