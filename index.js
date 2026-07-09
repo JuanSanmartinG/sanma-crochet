@@ -14,7 +14,6 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 // 1. CONFIGURACIÓN DE BASE DE DATOS (POSTGRES)
 // ==========================================
-const { Pool } = require('pg');
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -440,35 +439,6 @@ app.post('/admin/productos/agregar', requiereAutenticacion, upload.single('image
     }
 });
 
-app.post('/admin/productos/editar/:id', requiereAutenticacion, upload.single('image_file'), async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { title, base_price, description } = req.body;
-
-        if (req.file) {
-            const prodAntiguo = await pool.query('SELECT image_url FROM products WHERE id = $1', [id]);
-            if (prodAntiguo.rows.length > 0 && prodAntiguo.rows[0].image_url) {
-                const oldPublicId = obtenerPublicId(prodAntiguo.rows[0].image_url);
-                if (oldPublicId) await cloudinary.uploader.destroy(oldPublicId);
-            }
-
-            const image_url = req.file.path;
-            await pool.query(
-                'UPDATE products SET title = $1, base_price = $2, image_url = $3, description = $4 WHERE id = $5',
-                [title, base_price, image_url, description, id]
-            );
-        } else {
-            await pool.query(
-                'UPDATE products SET title = $1, base_price = $2, description = $3 WHERE id = $4',
-                [title, base_price, description, id]
-            );
-        }
-        res.redirect('/admin/productos?success=updated');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al editar el producto.');
-    }
-});
 app.post('/admin/productos/editar/:id', requiereAutenticacion, upload.single('image_file'), async (req, res) => {
     try {
         const { id } = req.params;
