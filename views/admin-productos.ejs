@@ -17,12 +17,12 @@
 
     <div class="custom-layout-grid">
         <section class="form-custom-column">
-            <h3 class="form-title">✨ Añadir Nuevo Amigurumi</h3>
+            <h3 class="form-title">✨ Añadir Nuevo Producto</h3>
             <p class="form-subtitle">Completa los datos para publicarlo en la tienda virtual.</p>
 
             <form action="/admin/productos/agregar" method="POST" enctype="multipart/form-data" class="login-form">
                 <div class="form-group">
-                    <label for="title" class="form-label">Nombre del Amigurumi</label>
+                    <label for="title" class="form-label">Nombre del producto</label>
                     <input type="text" id="title" name="title" required class="form-input" placeholder="Ej: Jirafa Melcocha Tejida">
                 </div>
 
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="image_file" class="form-label">Foto del Amigurumi *</label>
+                    <label for="image_file" class="form-label">Foto del producto *</label>
                     <input type="file" id="image_file" name="image_file" accept="image/*" required class="form-input">
                 </div>
 
@@ -60,7 +60,7 @@
                         <% if (productos.length === 0) { %>
                             <tr>
                                 <td colspan="4" class="hero-text">
-                                    El catálogo está vacío. ¡Agrega tu primer amigurumi!
+                                    El catálogo está vacío. ¡Agrega tu primer producto!
                                 </td>
                             </tr>
                         <% } %>
@@ -78,7 +78,7 @@
                                     <div class="table-actions">
                                         <a href="/admin/productos/editar/<%= prod.id %>" class="btn-customize">Editar</a>
                                         
-                                    <form action="/admin/productos/eliminar" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este amigurumi del catálogo?');">
+                                    <form action="/admin/productos/eliminar" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este producto del catálogo?');">
                                         <input type="hidden" name="producto_id" value="<%= prod.id %>">
                                         <button type="submit" class="btn-danger">Eliminar</button>
                                     </form>
