@@ -408,8 +408,9 @@ body {
 .product-img {
     width: 100%;
     height: 240px;
-    object-fit: cover;
+    object-fit: contain;
     transition: var(--transition-smooth);
+    background-color: #fafafa;
 }
 
 .product-card:hover .product-img {
