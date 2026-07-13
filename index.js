@@ -44,7 +44,7 @@ const storage = new CloudinaryStorage({
     params: {
         folder: 'samigomu_comprobantes', 
         allowed_formats: ['jpg', 'png', 'jpeg'], 
-        transformation: [{ width: 800, height: 800, crop: 'limit' }] 
+        transformation: [{ width: 800, height: 800, crop: 'fill', gravity: 'auto' }]
     },
 });
 
