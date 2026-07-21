@@ -15,11 +15,11 @@ const PORT = process.env.PORT || 3000;
 // 1. CONFIGURACIÓN DE BASE DE DATOS (POSTGRES)
 // ==========================================
 
+console.log("URL de conexión:", process.env.DATABASE_URL); 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false 
-    }
+    
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
 pool.connect((err, client, release) => {
@@ -170,7 +170,7 @@ app.get('/personalizar', async (req, res) => {
     try {
         const resultado = await pool.query('SELECT * FROM products WHERE id = $1', [productoId]);
         if (resultado.rows.length === 0) {
-            return res.status(404).send('Lo sentimos, ese amigurumi no existe en nuestro catálogo.');
+            return res.status(404).send('Lo sentimos, ese producto no existe en nuestro catálogo.');
         }
         res.render('personalizar', { producto: resultado.rows[0] });
     } catch (err) {
@@ -203,7 +203,7 @@ app.post('/pedir', upload.single('payment_receipt'), async (req, res) => {
         await client.query('BEGIN');
 
         const productoRes = await client.query('SELECT base_price FROM products WHERE id = $1', [producto_id]);
-        if (productoRes.rows.length === 0) throw new Error('El amigurumi seleccionado no existe.');
+        if (productoRes.rows.length === 0) throw new Error('El producto seleccionado no existe.');
         const precioTotal = productoRes.rows[0].base_price;
 
         const queryOrden = `
@@ -246,6 +246,74 @@ app.post('/pedir', upload.single('payment_receipt'), async (req, res) => {
     } catch (err) {
         await client.query('ROLLBACK');
         console.error('Error al procesar el pedido:', err.message);
+        res.status(500).send('Hubo un error al guardar tu pedido. Por favor intenta de nuevo.');
+    } finally {
+        client.release();
+    }
+});
+
+app.get('/carrito', (req, res) => {
+    res.render('carrito');
+});
+
+app.post('/pedir-carrito', upload.single('payment_receipt'), async (req, res) => {
+    const { 
+        nombre_cliente, 
+        telefono_cliente, 
+        contacto_alternativo, 
+        direccion_envio, 
+        carrito_data 
+    } = req.body;
+
+    if (!req.file) {
+        return res.status(400).send('Falta comprobante de pago.');
+    }
+
+    const urlComprobante = req.file.path; 
+    const trackingCode = `SM-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const client = await pool.connect();
+
+    try {
+        const carrito = JSON.parse(carrito_data);
+        if (!carrito || carrito.length === 0) throw new Error('El carrito está vacío.');
+
+        let precioTotal = 0;
+        carrito.forEach(item => {
+            precioTotal += (item.precio * item.cantidad);
+        });
+
+        await client.query('BEGIN');
+
+        const queryOrden = `
+            INSERT INTO orders (
+                tracking_code, customer_name, customer_phone, alternative_contact, 
+                shipping_address, total_price, payment_method, payment_reference, 
+                status, payment_status
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, 'Transferencia', $7, 'Recibido', 'Pendiente')
+            RETURNING id;
+        `;
+        const ordenRes = await client.query(queryOrden, [
+            trackingCode, nombre_cliente, telefono_cliente, 
+            contacto_alternativo, direccion_envio, precioTotal, urlComprobante
+        ]);
+        const nuevoOrdenId = ordenRes.rows[0].id;
+
+        const queryItem = `
+            INSERT INTO order_items (order_id, product_id, custom_size, custom_colors, custom_notes, quantity)
+            VALUES ($1, $2, 'Estándar', 'Colores originales', 'Pedido desde carrito web', $3);
+        `;
+        
+        for (let item of carrito) {
+            await client.query(queryItem, [nuevoOrdenId, item.id, item.cantidad]);
+        }
+
+        await client.query('COMMIT');
+        res.redirect(`/pedido-exitoso?code=${trackingCode}`);
+
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error al procesar el carrito:', err.message);
         res.status(500).send('Hubo un error al guardar tu pedido. Por favor intenta de nuevo.');
     } finally {
         client.release();
@@ -297,15 +365,14 @@ app.get('/admin', requiereAutenticacion, async (req, res) => {
             SELECT 
                 o.id AS orden_id, o.tracking_code, o.customer_name, o.customer_phone, o.alternative_contact, o.shipping_address, o.status,
                 o.total_price, o.created_at, o.payment_method, o.payment_reference, o.payment_status,
-                p.title AS producto_nombre, oi.custom_size, oi.custom_colors, oi.custom_notes, oi.ref_image_url
+                p.title AS producto_nombre, oi.custom_size, oi.custom_colors, oi.custom_notes, oi.ref_image_url, oi.quantity
             FROM orders o
-            JOIN order_items oi ON o.id = oi.order_id
+            LEFT JOIN order_items oi ON o.id = oi.order_id
             LEFT JOIN products p ON oi.product_id = p.id
             ORDER BY o.created_at DESC;
         `;
         const resultado = await pool.query(query);
         
-        // CONTADOR DINÁMICO DE PENDIENTES (Suma soporte a estados viejos y nuevos)
         const pendientes = resultado.rows.filter(p => p.status === 'Pendiente' || p.status === 'Recibido' || p.status === 'Tejiendo');
         const nuevosCount = [...new Set(pendientes.map(p => p.orden_id))].length;
 
@@ -411,9 +478,9 @@ app.get('/admin/productos', requiereAutenticacion, async (req, res) => {
         const query = await pool.query('SELECT * FROM products ORDER BY id DESC');
         
         let alerta = null;
-        if (req.query.success === 'added') alerta = '✨ ¡Amigurumi publicado con éxito!';
+        if (req.query.success === 'added') alerta = '✨ !Producto publicado con éxito!';
         if (req.query.success === 'deleted') alerta = '🗑️ El producto ha sido eliminado.';
-        if (req.query.success === 'updated') alerta = '✏️ ¡Los cambios del amigurumi se guardaron!';
+        if (req.query.success === 'updated') alerta = '✏️ ¡Los cambios del producto se guardaron!';
 
         res.render('admin-productos', { productos: query.rows, alerta: alerta });
     } catch (err) {
@@ -436,6 +503,22 @@ app.post('/admin/productos/agregar', requiereAutenticacion, upload.single('image
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al agregar el producto.');
+    }
+});
+
+app.get('/admin/productos/editar/:id', requiereAutenticacion, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const resultado = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
+        
+        if (resultado.rows.length === 0) {
+            return res.status(404).send('Producto no encontrado.');
+        }
+
+        res.render('admin-productos-editar', { producto: resultado.rows[0] });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al cargar el producto.');
     }
 });
 
@@ -462,7 +545,7 @@ app.post('/admin/productos/editar/:id', requiereAutenticacion, upload.single('im
                 [title, base_price, description, id]
             );
         }
-        res.redirect('/admin/productos?success=updated');
+        res.redirect('/admin/productos');
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al editar el producto.');

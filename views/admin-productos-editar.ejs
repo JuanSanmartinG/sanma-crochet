@@ -9,7 +9,9 @@
         <h3 class="form-title">✏️ Editar Producto</h3>
         <p class="form-subtitle">Modifica los campos del producto y guarda los cambios de inmediato.</p>
 
-        <form action="/admin/productos/editar/<%= producto.id %>" method="POST" class="login-form">
+
+        <form action="/admin/productos/editar/<%= producto.id %>" method="POST" enctype="multipart/form-data" class="login-form">
+            
             <div class="form-group">
                 <label for="title" class="form-label">Nombre del Producto</label>
                 <input type="text" id="title" name="title" value="<%= producto.title %>" required class="form-input">
@@ -21,8 +23,16 @@
             </div>
 
             <div class="form-group">
-                <label for="image_url" class="form-label">URL de la Imagen</label>
-                <input type="text" id="image_url" name="image_url" value="<%= producto.image_url %>" class="form-input">
+                <label class="form-label">Imagen Actual</label>
+                <% if (producto.image_url) { %>
+                    <div style="margin-bottom: 10px;">
+                        <img src="<%= producto.image_url %>" alt="Vista previa" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);">
+                    </div>
+                <% } %>
+                
+                <label for="image_file" class="form-label">Cambiar Imagen (Opcional)</label>
+                <input type="file" id="image_file" name="image_file" class="form-input" accept="image/*">
+                <small style="color: var(--text-muted); font-size: 12px;">Si seleccionas una nueva imagen, se borrará la anterior de Cloudinary automáticamente para no saturar espacio.</small>
             </div>
 
             <div class="form-group">

@@ -43,7 +43,11 @@
                             </div>
                         </td>
                         
-                        <td><%= pedido.producto_nombre ? pedido.producto_nombre : '✨ Diseño Personalizado'%></td>
+                        <!-- Cantidad y Nombre del producto integrados -->
+                        <td>
+                            <span class="product-quantity"><%= pedido.quantity %>x</span> 
+                            <%= pedido.producto_nombre ? pedido.producto_nombre : '✨ Diseño Personalizado' %>
+                        </td>
                         
                         <td>
                             <div class="custom-details">

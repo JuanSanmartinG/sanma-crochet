@@ -1,4 +1,6 @@
-/* Variables globales y base */
+/* ==========================================
+   1. VARIABLES GLOBALES Y BASE
+   ========================================== */
 :root {
     --primary-purple: #7c4dff;
     --primary-purple-hover: #651fff;
@@ -26,6 +28,10 @@
     --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -50,7 +56,23 @@ body {
     color: var(--primary-purple);
 }
 
-/* Barra de navegación */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+.custom-main-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+/* ==========================================
+   2. NAVEGACIÓN
+   ========================================== */
 .main-nav {
     background-color: var(--bg-card);
     padding: 18px 40px;
@@ -59,6 +81,7 @@ body {
     align-items: center;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 2px 15px rgba(0,0,0,0.02);
+    width: 100%;
 }
 
 .nav-logo {
@@ -89,13 +112,9 @@ body {
     color: var(--primary-purple);
 }
 
-.container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 24px;
-}
-
-/* Botones */
+/* ==========================================
+   3. BOTONES
+   ========================================== */
 .btn-admin {
     background-color: var(--primary-purple);
     color: white !important;
@@ -103,6 +122,7 @@ body {
     border-radius: 20px;
     font-weight: 600;
     box-shadow: 0 4px 10px rgba(111, 66, 193, 0.2);
+    text-decoration: none;
 }
 
 .btn-admin:hover {
@@ -122,6 +142,7 @@ body {
     box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
     border: none;
     cursor: pointer;
+    text-align: center;
 }
 
 .btn-order:hover {
@@ -140,6 +161,8 @@ body {
     font-weight: bold;
     transition: var(--transition-smooth);
     box-shadow: 0 4px 10px rgba(111, 66, 193, 0.15);
+    display: inline-block;
+    text-align: center;
 }
 
 .btn-customize:hover {
@@ -158,7 +181,6 @@ body {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    box-sizing: border-box;
     transition: var(--transition-smooth);
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
@@ -217,11 +239,45 @@ body {
     background-color: var(--danger-red-hover);
 }
 
+.btn-delete-order {
+    background-color: #e63946;
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-delete-order:hover {
+    background-color: #cb2d3e;
+}
+
 .btn-block {
     width: 100%;
 }
 
-/* Formularios unificados */
+.btn-outline-purple {
+    background-color: transparent;
+    color: var(--primary-purple);
+    border: 2px solid var(--primary-purple);
+}
+
+.btn-outline-purple:hover {
+    background-color: var(--primary-purple);
+    color: white;
+}
+
+
+.btn-floating-cart:hover {
+    background-color: var(--primary-purple-hover);
+    transform: translateY(-3px);
+}
+
+/* ==========================================
+   4. FORMULARIOS
+   ========================================== */
 .form-group {
     margin-bottom: 24px;
     text-align: left !important;
@@ -242,7 +298,6 @@ body {
     padding: 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: var(--radius-sm);
-    box-sizing: border-box;
     font-size: 15px;
     font-family: inherit;
     background-color: #f8fafc;
@@ -273,7 +328,6 @@ body {
     border-radius: var(--radius-sm);
     cursor: pointer;
     display: block;
-    box-sizing: border-box;
     font-weight: 600;
     color: var(--text-muted);
     transition: var(--transition-smooth);
@@ -300,7 +354,27 @@ body {
     background-color: var(--primary-purple-hover);
 }
 
-/* Catálogo y landing page */
+.form-custom-column {
+    background: var(--bg-card);
+    padding: 25px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.form-title {
+    margin-top: 0;
+    color: #333;
+}
+
+.form-subtitle {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+/* ==========================================
+   5. CATÁLOGO, LANDING Y TARJETAS
+   ========================================== */
 .hero-title {
     font-size: 48px;
     font-weight: 800;
@@ -381,9 +455,10 @@ body {
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
     margin-top: 30px;
+    width: 100%;
 }
 
 .product-card {
@@ -397,6 +472,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     transition: var(--transition-smooth);
+    width: 100%;
 }
 
 .product-card:hover {
@@ -409,6 +485,7 @@ body {
     width: 100%;
     height: 240px;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 .product-card:hover .product-img {
@@ -435,43 +512,91 @@ body {
 }
 
 .product-footer {
-    padding: 18px 20px;
+    padding: 20px;
     border-top: 1px solid var(--border-color);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 16px; 
     background-color: #faf9f7;
+    align-items: center; 
+    text-align: center;
 }
 
 .product-price {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 800;
     color: var(--primary-purple);
+    width: 100%;
+    text-align: center; 
 }
 
-/* Páginas de personalización */
-.custom-main-container {
-    max-width: 800px;
-    margin: 40px auto 0 auto;
-    padding: 0 20px;
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; 
+    width: 100%;
+    align-items: center;
 }
 
+.product-actions .btn-customize,
+.product-actions .btn-agregar-carrito {
+    width: 90%; 
+    max-width: 240px;
+    padding: 12px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 30px; 
+    margin: 0 auto;
+}
+
+/* Estilo del Botón Flotante de Carrito */
+.btn-floating-cart {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--primary-purple);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: var(--shadow-hover);
+    cursor: pointer;
+    display: none;
+    z-index: 1000;
+    transition: var(--transition-smooth);
+}
+
+.btn-floating-cart:hover {
+    background-color: var(--primary-purple-hover);
+    transform: translateY(-3px);
+}
+
+/* ==========================================
+   6. CARRITO Y VISTAS DE PEDIDO
+   ========================================== */
 .back-link {
     text-decoration: none;
     color: var(--primary-purple);
     font-weight: bold;
+    display: inline-block;
+    margin-bottom: 20px;
 }
 
 .custom-layout-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
     gap: 40px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+    align-items: start;
+    width: 100%;
 }
 
 .product-preview-column {
-    flex: 1;
-    min-width: 300px;
+    width: 100%;
 }
 
 .product-featured-img {
@@ -490,26 +615,6 @@ body {
     font-size: 22px;
 }
 
-.form-custom-column {
-    flex: 1;
-    min-width: 300px;
-    background: var(--bg-alt);
-    padding: 25px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-}
-
-.form-title {
-    margin-top: 0;
-    color: #333;
-}
-
-.form-subtitle {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 20px;
-}
-
 .custom-order-container {
     max-width: 550px;
     margin: 40px auto;
@@ -519,6 +624,7 @@ body {
     box-shadow: var(--shadow-soft);
     border: 1px solid var(--border-color);
     text-align: left;
+    width: 100%;
 }
 
 .custom-order-title {
@@ -539,12 +645,87 @@ body {
     text-align: left;
 }
 
-/* Éxito y rastreo de pedidos */
+.cart-summary-box {
+    background: var(--bg-cta-box);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 25px;
+    border: 1px solid rgba(124, 77, 255, 0.2);
+}
+
+.cart-item-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 0;
+    color: var(--text-dark);
+}
+
+.cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-purple);
+    padding-top: 15px;
+}
+
+.qr-payment-container {
+    text-align: center;
+    margin: 24px 0;
+    padding: 15px;
+    background-color: #fdfdfd;
+    border-radius: 8px;
+}
+
+.qr-payment-title {
+    font-size: 1.1rem;
+    color: #2b2d42;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.qr-payment-image {
+    max-width: 260px;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+}
+
+.qr-payment-image:hover {
+    transform: scale(1.02);
+}
+
+.qr-payment-instruction {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 10px;
+}
+
+/* ==========================================
+   ESTILO PARA LA CANTIDAD EN EL ADMIN
+   ========================================== */
+.product-quantity {
+    font-weight: 800;
+    color: var(--primary-purple);
+    background-color: rgba(111, 66, 193, 0.08); /* Fondo sutil morado acorde a tu paleta */
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-right: 4px;
+    display: inline-block;
+}
+/* ==========================================
+   7. ÉXITO, RASTREO Y ADMINISTRACIÓN
+   ========================================== */
 .success-main-container {
     max-width: 600px;
     text-align: center;
     margin: 60px auto 0 auto;
     padding: 0 20px;
+    width: 100%;
 }
 
 .success-card {
@@ -553,6 +734,7 @@ body {
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-soft);
+    width: 100%;
 }
 
 .success-title {
@@ -594,20 +776,6 @@ body {
     margin-bottom: 25px;
 }
 
-.success-instructions {
-    font-size: 15px;
-    color: #555;
-    line-height: 1.6;
-}
-
-.success-actions {
-    margin-top: 20px;
-}
-
-.success-actions .btn-order {
-    max-width: 200px;
-}
-
 .tracking-main-title {
     color: var(--primary-purple);
     margin-top: 0;
@@ -644,36 +812,11 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
-.tracking-result-title {
-    margin-top: 0;
-    color: #333;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 8px;
-}
-
-.tracking-info-item {
-    margin: 10px 0;
-    font-size: 15px;
-}
-
-.tracking-status-container {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 15px;
-}
-
-/* Panel de administración */
 .admin-main-panel {
     text-align: left;
     max-width: 1300px;
     margin: 0 auto;
-}
-
-.admin-nav-bar {
-    margin-bottom: 25px;
-    text-align: left;
+    width: 100%;
 }
 
 .admin-table-container {
@@ -683,6 +826,7 @@ body {
     overflow-x: auto;
     box-shadow: var(--shadow-soft);
     margin-top: 25px;
+    width: 100%;
 }
 
 .admin-table {
@@ -710,17 +854,6 @@ body {
     background-color: #fdfcfb;
 }
 
-.client-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.custom-details p {
-    margin: 2px 0;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
 .table-img {
     width: 60px;
     height: 60px;
@@ -734,10 +867,6 @@ body {
     display: flex;
     gap: 8px;
     align-items: center;
-}
-
-.table-actions form {
-    margin: 0;
 }
 
 .status-badge {
@@ -768,15 +897,6 @@ body {
     border: 1px solid #bbf7d0;
 }
 
-.badge-method {
-    background-color: #f3e8ff;
-    color: #6b21a8;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
-}
-
 .admin-select-status {
     padding: 8px 12px;
     font-size: 14px;
@@ -792,18 +912,6 @@ body {
     border-color: var(--primary-purple);
 }
 
-.alert-banner {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 15px 20px;
-    border-radius: var(--radius-sm);
-    border: 1px solid #c3e6cb;
-    margin-bottom: 25px;
-    font-weight: bold;
-    text-align: left;
-    box-sizing: border-box;
-}
-
 .admin-page-header {
     display: flex;
     justify-content: space-between;
@@ -811,19 +919,15 @@ body {
     margin-bottom: 30px;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--border-color);
+    width: 100%;
 }
 
-.admin-page-header h2 {
-    margin: 0;
-    text-align: left;
-}
-
-/* Login y seguridad */
 .login-main-container {
     display: block;
     max-width: 400px;
     margin: 60px auto;
     padding: 0 20px;
+    width: 100%;
 }
 
 .login-card {
@@ -831,8 +935,9 @@ body {
     padding: 30px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-soft);
     text-align: center;
+    width: 100%;
 }
 
 .login-title {
@@ -858,40 +963,69 @@ body {
     margin-bottom: 20px;
 }
 
-.login-form {
-    text-align: left;
+/* ==========================================
+   MODAL / LIGHTBOX DE IMÁGENES
+   ========================================== */
+.product-img {
+    cursor: pointer; 
+    transition: transform 0.3s ease;
 }
 
-/* Módulo de pagos */
-.transfer-box {
-    background-color: var(--bg-light);
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-color);
+.image-modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.85); 
+    backdrop-filter: blur(5px); 
+    align-items: center;
+    justify-content: center;
 }
 
-.transfer-box.hidden {
-    display: none;
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 85%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    animation: zoomModal 0.3s ease;
 }
 
-.qr-placeholder {
-    text-align: center;
-    margin: 15px 0;
-    background-color: #e9ecef;
-    padding: 30px;
+@keyframes zoomModal {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-close {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    color: #fff;
+    font-size: 45px;
     font-weight: bold;
-    color: var(--text-muted);
-    border-radius: var(--radius-sm);
-    border: 2px dashed var(--border-color);
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-/* Footer */
+.modal-close:hover {
+    color: var(--primary-purple);
+}
+
+/* ==========================================
+   8. FOOTER
+   ========================================== */
 .site-footer {
-    background-color: #fcf9f5; /* Un tono cálido sutil que combina con crochet */
+    background-color: #fcf9f5;
     padding: 30px 20px 15px 20px;
     margin-top: 50px;
-    border-top: 2px dashed #e6dbd0; /* Decoración estilo costura */
+    border-top: 2px dashed #e6dbd0;
+    width: 100%;
 }
 
 .footer-content {
@@ -911,7 +1045,7 @@ body {
 
 .footer-brand-name {
     font-size: 1.5rem;
-    color: #c296d8; /* Un color rojizo/picante sutil para Chilli */
+    color: #c296d8;
     margin-bottom: 8px;
     font-weight: 700;
 }
@@ -939,12 +1073,6 @@ body {
     font-style: italic;
 }
 
-.footer-divider {
-    border: 0;
-    border-top: 1px solid #e6dbd0;
-    margin: 20px 0 15px 0;
-}
-
 .footer-bottom {
     max-width: 1200px;
     margin: 0 auto;
@@ -953,78 +1081,30 @@ body {
     color: #777;
 }
 
-
-/* Contenedor principal del QR de pagos */
-.qr-payment-container {
-    text-align: center;
-    margin: 24px 0;
-    padding: 15px;
-    background-color: #fdfdfd;
-    border-radius: 8px;
-}
-
-.qr-payment-title {
-    font-size: 1.1rem;
-    color: #2b2d42;
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.qr-payment-image {
-    max-width: 260px;
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease;
-}
-
-.qr-payment-image:hover {
-    transform: scale(1.02);
-}
-
-.qr-payment-instruction {
-    font-size: 0.9rem;
-    color: #6c757d;
-    margin-top: 10px;
-}
-
-.btn-delete-order {
-    background-color: #e63946;
-    color: #ffffff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.btn-delete-order:hover {
-    background-color: #cb2d3e;
-}
-
-/*  OPTIMIZACIÓN PARA DISPOSITIVOS MÓVILES (MÁXIMO 768px)*/
+/* ==========================================
+   9. MEDIA QUERIES (MÓVIL)
+   ========================================== */
 @media (max-width: 768px) {
-    
-    .container {
+    .container, .custom-main-container {
         margin: 20px auto;
         padding: 0 16px; 
     }
 
     .main-nav {
         padding: 15px 20px;
-        flex-direction: column; /
+        flex-direction: column;
         text-align: center;
+        gap: 12px;
     }
     
     .nav-links {
         justify-content: center;
         width: 100%;
+        flex-wrap: wrap;
     }
     
     .nav-links a {
-        margin: 0 10px; 
+        margin: 5px 10px; 
         font-size: 14px;
     }
 
@@ -1051,11 +1131,13 @@ body {
     }
 
     .custom-layout-grid {
-        gap: 24px;
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
     
     .product-preview-column, 
     .form-custom-column {
+        width: 100%;
         min-width: 100%; 
     }
 
@@ -1068,5 +1150,15 @@ body {
     .tracking-code-box {
         font-size: 20px; 
         padding: 10px 16px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-info-section {
+        text-align: center;
     }
 }

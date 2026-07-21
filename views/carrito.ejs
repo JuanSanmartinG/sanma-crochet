@@ -1,0 +1,72 @@
+<%- include('partials/header') %>
+
+<main class="custom-main-container">
+    <a href="/" class="back-link">← Volver al Catálogo</a>
+
+    <div class="custom-layout-grid">
+        
+        <div class="product-preview-column">
+            <h2 class="product-title">Resumen de tu pedido</h2>
+            
+            <div class="cart-summary-box">
+                <div id="cart-items-container">
+                    </div>
+                <div class="cart-total-row">
+                    <span>Total a pagar:</span>
+                    <span id="cart-total-price">$0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-custom-column">
+            <h3 class="form-title">Tus Datos de Envío</h3>
+
+            <form action="/pedir-carrito" method="POST" enctype="multipart/form-data" class="customization-form">
+                
+                <input type="hidden" name="carrito_data" id="carrito_data">
+
+                <div class="form-group">
+                    <label class="form-label">Tu Nombre completo *</label>
+                    <input type="text" name="nombre_cliente" required class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Teléfono de Contacto (WhatsApp) *</label>
+                    <input type="tel" name="telefono_cliente" required class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📸 Instagram o Correo Alternativo *</label>
+                    <input type="text" name="contacto_alternativo" required class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📍 Dirección de Envío Completa *</label>
+                    <input type="text" name="direccion_envio" required class="form-input">
+                </div>
+
+                <hr class="success-divider">
+                
+                <h3 class="form-title">💳 Método de Pago (100% Adelantado)</h3>
+
+                <div class="qr-payment-container">
+                    <h3 class="qr-payment-title">📸 Escanea el QR para realizar tu transferencia:</h3>
+                    <img src="/images/QR_pago.jpeg" alt="QR de Pago" class="qr-payment-image">
+                    <p class="qr-payment-instruction">El valor exacto está en el resumen de arriba.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment_receipt" class="form-label label-highlight">Sube el Pantallazo de tu Comprobante *</label>
+                    <input type="file" name="payment_receipt" id="payment_receipt" accept="image/*" required class="form-file">
+                </div>
+
+                <button type="submit" class="submit-order-btn" id="btn-submit-cart">Confirmar Pedido 🧶</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script src="/js/carrito.js"></script>
+<%- include('partials/footer') %>
+</body>
+</html>

@@ -14,7 +14,7 @@
     
     <div class="products-grid">
         <% if (productos.length === 0) { %>
-            <p>No hay productos disponibles en este momento.</p>
+            <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">No hay productos disponibles en este momento.</p>
         <% } else { %>
             <% productos.forEach(producto => { %>
                 <div class="product-card">
@@ -23,17 +23,80 @@
                     <div class="product-body">
                         <h4 class="product-title"><%= producto.title %></h4>
                         <p class="product-desc"><%= producto.description %></p>
-                    </div>
+                    </div> <!-- Cierre correcto de product-body -->
                     
                     <div class="product-footer">
                         <span class="product-price">$<%= Number(producto.base_price).toLocaleString('es-CO') %></span>
-                        <a href="/personalizar?id=<%= producto.id %>" class="btn-customize">¡Lo quiero!</a>
-                    </div>
-                </div>
+                        
+                        <div class="product-actions">
+                            <button 
+                                class="btn-customize btn-outline-purple btn-agregar-carrito" 
+                                data-id="<%= producto.id %>" 
+                                data-nombre="<%= producto.title %>" 
+                                data-precio="<%= producto.base_price %>"
+                                data-imagen="<%= producto.image_url %>"
+                            >
+                                🛒 Agregar al carrito
+                            </button>
+                            
+                            <a href="/personalizar?id=<%= producto.id %>" class="btn-customize text-center">
+                                ⚡ Comprar ahora
+                            </a>
+                        </div>
+                    </div> <!-- Cierre correcto de product-footer -->
+                </div> <!-- Cierre correcto de product-card -->
             <% }) %>
         <% } %>
     </div>
 </main>
+
+<!-- Botón flotante del carrito y script ubicados fuera de la grilla -->
+<button id="btn-checkout-carrito" class="btn-floating-cart">
+    🛍️ Ver Carrito (<span id="carrito-count">0</span>)
+</button>
+<script src="/js/carrito.js"></script>
+
+<div id="imgModal" class="image-modal">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="img01" alt="Vista ampliada">
+</div>
+
 <%- include('partials/footer') %>
+
+<div id="imgModal" class="image-modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="img01" alt="Vista ampliada">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("imgModal");
+            const modalImg = document.getElementById("img01");
+            const closeBtn = document.querySelector(".modal-close");
+
+            // Escuchar clic en cualquier imagen del catálogo con clase .product-img
+            document.querySelectorAll(".product-img").forEach(img => {
+                img.addEventListener("click", function() {
+                    modal.style.display = "flex";
+                    modalImg.src = this.src;
+                });
+            });
+
+            // Cerrar al presionar la "X"
+            if (closeBtn) {
+                closeBtn.addEventListener("click", () => {
+                    modal.style.display = "none";
+                });
+            }
+
+            // Cerrar al hacer clic fuera de la foto
+            window.addEventListener("click", (e) => {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>
